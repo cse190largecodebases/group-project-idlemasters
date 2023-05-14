@@ -171,6 +171,7 @@ class EditorWindow:
         text.bind("<<cut>>", self.cut)
         text.bind("<<copy>>", self.copy)
         text.bind("<<paste>>", self.paste)
+        text.bind("<<highlight-line-region>>", self.toggle_highlight)
         text.bind("<<center-insert>>", self.center_insert_event)
         text.bind("<<help>>", self.help_dialog)
         text.bind("<<python-docs>>", self.python_docs)
@@ -630,6 +631,31 @@ class EditorWindow:
         self.text.event_generate("<<Paste>>")
         self.text.see("insert")
         return "break"
+
+    def highlight_region(self, event):
+        # get the selected region
+        start = self.text.index('sel.first')
+        end = self.text.index('sel.last')
+        # highlight the selected region using blue color
+        self.text.tag_add('sel', start, end)
+        self.text.tag_config('sel', background='blue')
+
+
+    def toggle_highlight(self, event):
+        # get the selected region
+        start = self.text.index('sel.first')
+        end = self.text.index('sel.last')
+
+        if self.text.tag_ranges('sel'):
+            # remove highlighting if region is already highlighted
+            self.text.tag_remove('sel', start, end)
+        else:
+            # highlight the selected region using blue color
+            self.text.tag_add('sel', start, end)
+            self.text.tag_config('sel', background='blue')
+
+
+
 
     def select_all(self, event=None):
         self.text.tag_add("sel", "1.0", "end-1c")
