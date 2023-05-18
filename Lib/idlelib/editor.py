@@ -171,7 +171,6 @@ class EditorWindow:
         text.bind("<<cut>>", self.cut)
         text.bind("<<copy>>", self.copy)
         text.bind("<<paste>>", self.paste)
-        text.bind("<<highlight-line-region>>", self.toggle_highlight)
         text.bind("<<center-insert>>", self.center_insert_event)
         text.bind("<<help>>", self.help_dialog)
         text.bind("<<python-docs>>", self.python_docs)
@@ -476,6 +475,18 @@ class EditorWindow:
         self.menudict['file'].insert_cascade(3, label='Recent Files',
                                              underline=0,
                                              menu=self.recent_files_menu)
+
+        self.color_menu = Menu(self.menudict['edit'], tearoff=0)
+
+        self.menudict['edit'].add_cascade(label="Highlight Line Region", menu=self.color_menu)
+        self.color_menu.add_command(label="blue", command=lambda: self.toggle_highlight("light blue"))
+        self.color_menu.add_command(label="red", command=lambda: self.toggle_highlight("#FF7F7F"))
+        self.color_menu.add_command(label="yellow", command=lambda: self.toggle_highlight("#FFFFBF"))
+        self.color_menu.add_command(label="green", command=lambda: self.toggle_highlight("#88FF88"))
+        self.color_menu.add_command(label="orange", command=lambda: self.toggle_highlight("#FFBF80"))
+        self.color_menu.add_command(label="purple", command=lambda: self.toggle_highlight("#BF80FF"))
+        self.color_menu.add_command(label="Unhighlight", command=lambda: self.toggle_highlight("white"))
+        
         self.base_helpmenu_length = self.menudict['help'].index(END)
         self.reset_help_menu_entries()
 
@@ -632,30 +643,12 @@ class EditorWindow:
         self.text.see("insert")
         return "break"
 
-    def highlight_region(self, event):
+    def toggle_highlight(self, color):
         # get the selected region
         start = self.text.index('sel.first')
         end = self.text.index('sel.last')
-        # highlight the selected region using blue color
-        self.text.tag_add('sel', start, end)
-        self.text.tag_config('sel', background='blue')
-
-
-    def toggle_highlight(self, event):
-        # get the selected region
-        start = self.text.index('sel.first')
-        end = self.text.index('sel.last')
-
-        if self.text.tag_ranges('sel'):
-            # remove highlighting if region is already highlighted
-            self.text.tag_remove('sel', start, end)
-        else:
-            # highlight the selected region using blue color
-            self.text.tag_add('sel', start, end)
-            self.text.tag_config('sel', background='blue')
-
-
-
+        self.text.tag_add('highlight', start, end)
+        self.text.tag_config('highlight', background=color)
 
     def select_all(self, event=None):
         self.text.tag_add("sel", "1.0", "end-1c")
