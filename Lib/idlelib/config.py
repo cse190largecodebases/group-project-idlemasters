@@ -601,7 +601,6 @@ class IdleConf:
             '<<copy>>': ['<Control-c>', '<Control-C>'],
             '<<cut>>': ['<Control-x>', '<Control-X>'],
             '<<paste>>': ['<Control-v>', '<Control-V>'],
-            '<<highlight-line-region>>': ['<Control-l>', '<Control-L>'],
             '<<beginning-of-line>>': ['<Control-a>', '<Home>'],
             '<<center-insert>>': ['<Control-l>'],
             '<<close-all-windows>>': ['<Control-q>'],
