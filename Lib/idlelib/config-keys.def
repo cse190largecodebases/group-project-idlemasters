@@ -307,3 +307,4 @@ run-module= <Key-F5>
 run-custom= <Shift-Key-F5>
 check-module= <Option-Key-x>
 zoom-height= <Option-Key-0>
+highlight-line-region=<Control-Key-l>
