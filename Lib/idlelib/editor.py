@@ -485,7 +485,7 @@ class EditorWindow:
         self.color_menu.add_command(label="green", command=lambda: self.toggle_highlight("#88FF88"))
         self.color_menu.add_command(label="orange", command=lambda: self.toggle_highlight("#FFBF80"))
         self.color_menu.add_command(label="purple", command=lambda: self.toggle_highlight("#BF80FF"))
-        self.color_menu.add_command(label="white", command=lambda: self.toggle_highlight("white"))
+        self.color_menu.add_command(label="Unhighlight", command=lambda: self.toggle_highlight("white"))
         
         self.base_helpmenu_length = self.menudict['help'].index(END)
         self.reset_help_menu_entries()
