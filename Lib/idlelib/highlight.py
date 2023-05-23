@@ -55,6 +55,9 @@ class HighlightParagraph:
             # Add the new highlight tag to the selected region
             self.editwin.text.tag_add(color_tag, start, end)
             self.editwin.text.tag_config(color_tag, background=color)
+            if color == "white":
+                self.editwin.text.tag_remove(color_tag, start, end)
+            self.editwin.text.tag_raise("sel")
         return "break"
 
 
