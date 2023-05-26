@@ -97,7 +97,6 @@ class IOBinding:
                         not self.filename and
                         self.get_saved()):
                     flist.open(filename, self.loadfile)
-                    # "1.2", "1.6"
                 else:
                     flist.open(filename)
                     
@@ -290,9 +289,6 @@ class IOBinding:
         # Write the JSON data to the file
         with open(file_path, 'w') as file:
             file.write(json_data)
-            
-        # self.editwin.text.tag_add('test', value0, value1)
-        # self.editwin.text.tag_config('test', background="#FF7F7F")
         
         text = self.fixnewlines()
         chars = self.encode(text)
