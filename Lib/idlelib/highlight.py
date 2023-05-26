@@ -36,7 +36,7 @@ class HighlightParagraph:
         start, end = self.editwin.get_selection_indices()
         if start and end:
             # Create unique tag for each color
-            color_tag = 'highlight_' + color.replace('#', '') 
+            color_tag = 'highlight_' + color.replace('#', '')
             
             # Iterate over all text in selected region
             index = start
