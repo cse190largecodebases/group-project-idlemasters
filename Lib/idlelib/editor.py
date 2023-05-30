@@ -481,6 +481,7 @@ class EditorWindow:
         # create color_menu and call the class HighlightParagraph
         self.color_menu = Menu(self.menudict['edit'], tearoff=0)    
         self.HighlightParagraph(self).create_color_menu()
+        self.HighlightParagraph(self).create_next_highlight()
         
         self.base_helpmenu_length = self.menudict['help'].index(END)
         self.reset_help_menu_entries()

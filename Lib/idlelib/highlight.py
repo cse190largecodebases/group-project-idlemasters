@@ -33,8 +33,15 @@ class HighlightParagraph:
         else:
             self.editwin.update_menu_state('edit', "Highlight Line Region", 'disabled')
         
-        
+    def create_next_highlight(self):
+        if self.editwin.allow_highlight:
+            self.editwin.text.bind("<<next-highlight>>", self.next_highlight)
+        else:
+            self.editwin.update_menu_state('edit', "Find Next Highlight", 'disabled')
     
+    def next_highlight(self, event):
+        print("hello")
+        return 'break'
     
     def toggle_highlight(self, color):
         # get the selected region
