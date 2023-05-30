@@ -117,6 +117,8 @@ class IOBinding:
                             for highlight in tuple_tag:
                                 flist.dict[filename].text.tag_add(all_tags[idx], highlight[0], highlight[1])
                                 flist.dict[filename].text.tag_config(all_tags[idx], background=all_colors[idx])
+                                
+                    flist.dict[filename].text.tag_raise("sel")
                     
                     
             else:
