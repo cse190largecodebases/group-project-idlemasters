@@ -67,6 +67,7 @@ class EditorWindow:
     filesystemencoding = sys.getfilesystemencoding()  # for file names
     help_url = None
 
+    allow_highlight = True
     allow_code_context = True
     allow_line_numbers = True
     user_input_insert_tags = None

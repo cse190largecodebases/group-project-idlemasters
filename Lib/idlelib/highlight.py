@@ -22,13 +22,18 @@ class HighlightParagraph:
         
     def create_color_menu(self):
         self.editwin.menudict['edit'].add_cascade(label="Highlight Line Region", menu=self.editwin.color_menu)
-        self.editwin.color_menu.add_command(label="blue", command=lambda: self.toggle_highlight("light blue"))
-        self.editwin.color_menu.add_command(label="red", command=lambda: self.toggle_highlight("#FF7F7F"))
-        self.editwin.color_menu.add_command(label="yellow", command=lambda: self.toggle_highlight("#FFFFBF"))
-        self.editwin.color_menu.add_command(label="green", command=lambda: self.toggle_highlight("#88FF88"))
-        self.editwin.color_menu.add_command(label="orange", command=lambda: self.toggle_highlight("#FFBF80"))
-        self.editwin.color_menu.add_command(label="purple", command=lambda: self.toggle_highlight("#BF80FF"))
-        self.editwin.color_menu.add_command(label="Unhighlight", command=lambda: self.toggle_highlight("white"))
+        if self.editwin.allow_highlight:
+            self.editwin.color_menu.add_command(label="blue", command=lambda: self.toggle_highlight("light blue"))
+            self.editwin.color_menu.add_command(label="red", command=lambda: self.toggle_highlight("#FF7F7F"))
+            self.editwin.color_menu.add_command(label="yellow", command=lambda: self.toggle_highlight("#FFFFBF"))
+            self.editwin.color_menu.add_command(label="green", command=lambda: self.toggle_highlight("#88FF88"))
+            self.editwin.color_menu.add_command(label="orange", command=lambda: self.toggle_highlight("#FFBF80"))
+            self.editwin.color_menu.add_command(label="purple", command=lambda: self.toggle_highlight("#BF80FF"))
+            self.editwin.color_menu.add_command(label="Unhighlight", command=lambda: self.toggle_highlight("white"))
+        else:
+            self.editwin.update_menu_state('edit', "Highlight Line Region", 'disabled')
+        
+        
     
     
     def toggle_highlight(self, color):
