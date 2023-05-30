@@ -6,14 +6,19 @@ comment, uncomment, tabify, and untabify.
 File renamed from paragraph.py with functions added from editor.py.
 """
 import re
+import itertools
+
 from tkinter.messagebox import askyesno
 from tkinter.simpledialog import askinteger
 from idlelib.config import idleConf
 
 
+
 class HighlightParagraph:
+
     def __init__(self, editwin):
         self.editwin = editwin
+        self.privious_findNext = '0.0'
         self.editwin.text.config(selectbackground="grey")
         # Define all highlight colors here
         self.all_colors = ["light blue", "#FF7F7F", "#FFFFBF", "#88FF88", "#FFBF80", "#BF80FF", "white"]
@@ -30,17 +35,53 @@ class HighlightParagraph:
             self.editwin.color_menu.add_command(label="orange", command=lambda: self.toggle_highlight("#FFBF80"))
             self.editwin.color_menu.add_command(label="purple", command=lambda: self.toggle_highlight("#BF80FF"))
             self.editwin.color_menu.add_command(label="Unhighlight", command=lambda: self.toggle_highlight("white"))
+            self.editwin.text.bind("<<next-highlight>>", self.next_highlight)
+            self.editwin.text.bind("<<find-first-highlight>>", self.find_first_highlight_event)
         else:
             self.editwin.update_menu_state('edit', "Highlight Line Region", 'disabled')
-        
-    def create_next_highlight(self):
-        if self.editwin.allow_highlight:
-            self.editwin.text.bind("<<next-highlight>>", self.next_highlight)
-        else:
             self.editwin.update_menu_state('edit', "Find Next Highlight", 'disabled')
+            self.editwin.update_menu_state('edit', "Find First Highlight", 'disabled')
     
+    def find_first_highlight_event(self, event):
+        self.privious_findNext = '0.0'
+        self.next_highlight(None)
+        return 'break'
+        
     def next_highlight(self, event):
-        print("hello")
+        # list to save the tag data
+        tag_list = []
+        
+        # get all type of tag data
+        for tag in self.all_tags:
+            tag_range = list(self.editwin.text.tag_ranges(tag))
+            tag_range_string = [str(element) for element in tag_range]
+            tuple_tag = [(tag_range_string[i], tag_range_string[i+1]) for i in range(0, len(tag_range_string), 2)]
+            tag_list.append(tuple_tag)
+            
+        combine_tag_list = sorted(list(itertools.chain.from_iterable(tag_list)), key=lambda x: (int(x[0].split('.')[0]), int(x[0].split('.')[1])))
+        
+        
+        next_tag = None
+        # find the next tag
+        for tag in combine_tag_list:
+            row = int(tag[0].split('.')[0])
+            col = int(tag[0].split('.')[1])
+            if row == int(self.privious_findNext.split('.')[0]) and col > int(self.privious_findNext.split('.')[1]):
+                next_tag = tag[0]
+                break
+            elif row > int(self.privious_findNext.split('.')[0]):
+                next_tag = tag[0]
+                break
+        # if reach to the end, go to the first tag
+        if next_tag == None:
+            next_tag = combine_tag_list[0][0]
+            
+        
+        self.editwin.text.tag_remove("sel", "1.0", "end")
+        self.editwin.text.mark_set("insert", next_tag)
+        self.editwin.text.see("insert")
+        self.editwin.set_line_and_column()
+        self.privious_findNext = next_tag
         return 'break'
     
     def toggle_highlight(self, color):
