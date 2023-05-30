@@ -872,6 +872,7 @@ class PyShell(OutputWindow):
                               "rmenu_check_copy"))
     del _idx
 
+    allow_highlight = False
     allow_line_numbers = False
     user_input_insert_tags = "stdin"
 
