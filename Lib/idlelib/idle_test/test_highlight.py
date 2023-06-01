@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from idlelib.highlight import HighlightParagraph
-from idlelib.idle_test.mock_idle import Editor, Func
+from idlelib.idle_test.mock_idle import Editor
 from tkinter import Tk, Text
 
 class HighlightParagraphTestCase(unittest.TestCase):
@@ -19,8 +19,7 @@ class HighlightParagraphTestCase(unittest.TestCase):
         self.text.insert('1.0', multiline_test_string)
         self.editor = Editor(text=self.text)
         self.highlighter = HighlightParagraph(self.editor)
-        # self.editor.menudict = {'edit': Func(return_self=True)}
-        # self.editor.color_menu = Func(return_self=True)
+        
 
     def tearDown(self):
         self.root.destroy()  # Destroy the Tkinter root window
@@ -28,14 +27,19 @@ class HighlightParagraphTestCase(unittest.TestCase):
     def test_toggle_highlight(self):
         start, end = '1.0', '2.0'
         color = "light blue"
-        # self.editor.get_selection_indices = Func(result=(start, end))
-        # self.editor.text.tag_names = Func(result=[])
-        # self.editor.text.index = Func(return_self=True)
-        print("1")
         self.highlighter.toggle_highlight(color)
-        print("2")
-        self.assertEqual(self.editor.text.tag_add.called, 1)
-        self.assertEqual(self.editor.text.tag_config.called, 1)
+
+        #check if the selected region is correctly highlighted
+        self.assertIn('highlight_light blue', self.text.tag_names(start))
+        
+        #simulate unhighlighting
+        color = "white"
+        self.highlighter.toggle_highlight(color)
+
+        #check if the selected region is correctly unhighlighted
+        self.assertNotIn('highlight_lightblue', self.text.tag_names(start))
+        
+        
 
 if __name__ == '__main__':
     unittest.main()

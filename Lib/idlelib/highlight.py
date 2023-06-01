@@ -46,16 +46,13 @@ class HighlightParagraph:
     def toggle_highlight(self, color):
         # get the selected region
         start, end = self.editwin.get_selection_indices()
-        print("color:", color)
-        print("start:", start)
-        print("end:", end)
+        
         if start and end:
             # Create unique tag for each color
             color_tag = 'highlight_' + color.replace('#', '')
             
             # Iterate over all text in selected region
             idx = start
-            print(idx)
             while idx != end:
                 # Get all tags at this index
                 tags = self.editwin.text.tag_names(idx)
@@ -70,9 +67,7 @@ class HighlightParagraph:
             
             # Add the new highlight tag to the selected region
             self.editwin.text.tag_add(color_tag, start, end)
-            print('7')
             self.editwin.text.tag_config(color_tag, background=color)
-            print('5')
             if color == "white":
                 self.editwin.text.tag_remove(color_tag, start, end)
             self.editwin.text.tag_raise("sel")
