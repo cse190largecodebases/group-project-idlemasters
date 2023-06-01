@@ -1,14 +1,14 @@
 import unittest
 from unittest.mock import MagicMock
-from tkinter import Tk
 from idlelib.highlight import HighlightParagraph
 from idlelib.idle_test.mock_idle import Editor, Func
-from idlelib.idle_test.mock_tk import Text
+from tkinter import Tk, Text
 
 class HighlightParagraphTestCase(unittest.TestCase):
     def setUp(self):
         self.root = Tk()  # Create a Tkinter root window
-        text = Text()
+        self.root.withdraw()
+        self.text = Text(self.root)
         multiline_test_string = (
         "    '''The first line is under the max width.\n"
         "    The second line's length is way over the max width. It goes "
@@ -16,11 +16,11 @@ class HighlightParagraphTestCase(unittest.TestCase):
         "    Same thing with the third line. It is also way over the max "
         "width, but FormatParagraph will fix it.\n"
         "    '''\n")
-        text.insert('1.0', multiline_test_string)
-        self.editor = Editor(self.root, text=text)
+        self.text.insert('1.0', multiline_test_string)
+        self.editor = Editor(text=self.text)
         self.highlighter = HighlightParagraph(self.editor)
-        self.editor.menudict = {'edit': Func(return_self=True)}
-        self.editor.color_menu = Func(return_self=True)
+        # self.editor.menudict = {'edit': Func(return_self=True)}
+        # self.editor.color_menu = Func(return_self=True)
 
     def tearDown(self):
         self.root.destroy()  # Destroy the Tkinter root window
@@ -28,9 +28,9 @@ class HighlightParagraphTestCase(unittest.TestCase):
     def test_toggle_highlight(self):
         start, end = '1.0', '2.0'
         color = "light blue"
-        self.editor.get_selection_indices = Func(result=(start, end))
-        self.editor.text.tag_names = Func(result=[])
-        self.editor.text.index = Func(return_self=True)
+        # self.editor.get_selection_indices = Func(result=(start, end))
+        # self.editor.text.tag_names = Func(result=[])
+        # self.editor.text.index = Func(return_self=True)
         print("1")
         self.highlighter.toggle_highlight(color)
         print("2")
