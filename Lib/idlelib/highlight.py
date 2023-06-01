@@ -38,6 +38,7 @@ class HighlightParagraph:
             self.editwin.text.bind("<<next-highlight>>", self.next_highlight)
             self.editwin.text.bind("<<find-first-highlight>>", self.find_first_highlight_event)
         else:
+            # disable the button
             self.editwin.update_menu_state('edit', "Highlight Line Region", 'disabled')
             self.editwin.update_menu_state('edit', "Find Next Highlight", 'disabled')
             self.editwin.update_menu_state('edit', "Find First Highlight", 'disabled')
