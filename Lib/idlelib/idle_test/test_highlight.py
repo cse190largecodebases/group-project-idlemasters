@@ -1,8 +1,9 @@
 import unittest
-from unittest.mock import MagicMock
 from idlelib.highlight import HighlightParagraph
+from idlelib.iomenu import IOBinding
 from idlelib.idle_test.mock_idle import Editor
 from tkinter import Tk, Text
+import os
 
 class HighlightParagraphTestCase(unittest.TestCase):
     def setUp(self):
@@ -19,7 +20,7 @@ class HighlightParagraphTestCase(unittest.TestCase):
         self.text.insert('1.0', multiline_test_string)
         self.editor = Editor(text=self.text)
         self.highlighter = HighlightParagraph(self.editor)
-        
+        self.io_binding = IOBinding(self.editor)
 
     def tearDown(self):
         self.root.destroy()  # Destroy the Tkinter root window
@@ -51,20 +52,36 @@ class HighlightParagraphTestCase(unittest.TestCase):
         start = '1.0'
         end = '2.0'
         color = "light blue"
-        self.highlighter.toggle_highlight(color, start, en)
+        self.highlighter.toggle_highlight(color, start, end)
 
-        # Save the state of the text widget
-        original_text = self.text.get('1.0', 'end')
+        # Create a temporary file and save the contents of the text widget using IOBinding
+        temp_filename = "temp_highlight.txt"
+        self.io_binding.save(temp_filename)
 
-        # Reopen the text widget (simulate reopening)
-        self.text.delete('1.0', 'end')
-        self.text.insert('1.0', original_text)
+        # Close the temporary file
+        self.io_binding.close()
 
-        # Check if the selected region is still highlighted
+        # Close the current text widget
+        self.root.destroy()
+
+        # Create a new text widget and load the contents from the temporary file
+        self.root = Tk()
+        self.root.withdraw()
+        self.text = Text(self.root)
+        self.text.load(temp_filename)
+
+        # Reinitialize the HighlightParagraph instance with the new text widget
+        self.editor = Editor(text=self.text)
+        self.highlighter = HighlightParagraph(self.editor)
+
+        # Verify that the highlighted region is still highlighted
         idx = start
         while idx != end:
             self.assertIn('highlight_light blue', self.text.tag_names(idx))
             idx = self.text.index('%s+1c' % idx)
+
+        # Clean up the temporary file
+        os.remove(temp_filename)
 
 
 if __name__ == '__main__':
