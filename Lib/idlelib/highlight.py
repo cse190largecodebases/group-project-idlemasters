@@ -10,19 +10,20 @@ from tkinter.messagebox import askyesno
 from tkinter.simpledialog import askinteger
 from idlelib.config import idleConf
 
+LIGHT_BLUE = "light blue"
+LIGHT_RED = "#FF7F7F"
+LIGHT_YELLOW = "#FFFFBF"
+LIGHT_GREEN = "#88FF88"
+LIGHT_ORANGE = "#FFBF80"
+LIGHT_PURPLE = "#BF80FF"
+UNHIGHLIGHT = "white"
 
 class HighlightParagraph:
     def __init__(self, editwin):
         self.editwin = editwin
         self.editwin.text.config(selectbackground="grey")
         # Define all highlight colors here
-        LIGHT_BLUE = "light blue"
-        LIGHT_RED = "#FF7F7F"
-        LIGHT_YELLOW = "#FFFFBF"
-        LIGHT_GREEN = "#88FF88"
-        LIGHT_ORANGE = "#FFBF80"
-        LIGHT_PURPLE = "#BF80FF"
-        UNHIGHLIGHT = "white"
+    
         self.all_colors = [LIGHT_BLUE, LIGHT_RED, LIGHT_YELLOW, LIGHT_GREEN, LIGHT_ORANGE, LIGHT_PURPLE, UNHIGHLIGHT]
         # Convert color names to valid tag names (no # sign)
         self.all_tags = ['highlight_' + color.replace('#', '') for color in self.all_colors]
