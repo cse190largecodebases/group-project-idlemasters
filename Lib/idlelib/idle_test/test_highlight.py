@@ -25,21 +25,47 @@ class HighlightParagraphTestCase(unittest.TestCase):
         self.root.destroy()  # Destroy the Tkinter root window
 
     def test_toggle_highlight(self):
-        start, end = '1.0', '2.0'
+        start = '1.0'
+        end = '2.0'
         color = "light blue"
-        self.highlighter.toggle_highlight(color)
+        self.highlighter.toggle_highlight(color, start, end)
 
         #check if the selected region is correctly highlighted
-        self.assertIn('highlight_light blue', self.text.tag_names(start))
+        idx = start
+        while idx != end:
+            self.assertIn('highlight_light blue', self.text.tag_names(idx))
+            idx = self.text.index('%s+1c' % idx)
         
         #simulate unhighlighting
         color = "white"
         self.highlighter.toggle_highlight(color)
 
         #check if the selected region is correctly unhighlighted
-        self.assertNotIn('highlight_lightblue', self.text.tag_names(start))
+        idx = start
+        while idx != end:
+            self.assertNotIn('highlight_lightblue', self.text.tag_names(start))
+            idx = self.text.index('%s+1c' % idx)
         
-        
+    #check if the highlighted region is still highlighted after reopens
+    def test_highlight_reopen(self):
+        start = '1.0'
+        end = '2.0'
+        color = "light blue"
+        self.highlighter.toggle_highlight(color, start, en)
+
+        # Save the state of the text widget
+        original_text = self.text.get('1.0', 'end')
+
+        # Reopen the text widget (simulate reopening)
+        self.text.delete('1.0', 'end')
+        self.text.insert('1.0', original_text)
+
+        # Check if the selected region is still highlighted
+        idx = start
+        while idx != end:
+            self.assertIn('highlight_light blue', self.text.tag_names(idx))
+            idx = self.text.index('%s+1c' % idx)
+
 
 if __name__ == '__main__':
     unittest.main()
