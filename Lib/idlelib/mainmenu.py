@@ -60,6 +60,7 @@ menudefs = [
    ('Show Surrounding P_arens', '<<flash-paren>>'),
    None,
    ('Find Next Highlight', '<<next-highlight>>'),
+   ('Find First Highlight', '<<find-first-highlight>>'),
    ]),
 
  ('format', [
