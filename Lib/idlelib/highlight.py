@@ -14,7 +14,7 @@ from idlelib.config import idleConf
 class HighlightParagraph:
     def __init__(self, editwin):
         self.editwin = editwin
-        self.editwin.text.config(selectbackground="grey")
+        # self.editwin.text.config(selectbackground="grey")
         # Define all highlight colors here
         self.all_colors = ["light blue", "#FF7F7F", "#FFFFBF", "#88FF88", "#FFBF80", "#BF80FF", "white"]
         # Convert color names to valid tag names (no # sign)
@@ -46,23 +46,24 @@ class HighlightParagraph:
     def toggle_highlight(self, color):
         # get the selected region
         start, end = self.editwin.get_selection_indices()
+        
         if start and end:
             # Create unique tag for each color
             color_tag = 'highlight_' + color.replace('#', '')
             
             # Iterate over all text in selected region
-            index = start
-            while index != end:
+            idx = start
+            while idx != end:
                 # Get all tags at this index
-                tags = self.editwin.text.tag_names(index)
+                tags = self.editwin.text.tag_names(idx)
                 
                 # If there is a highlight tag, remove it
                 for tag in tags:
                     if tag in self.all_tags:
-                        self.editwin.text.tag_remove(tag, index)
+                        self.editwin.text.tag_remove(tag, idx)
                 
                 # Move to next character
-                index = self.editwin.text.index(f"{index}+1c")
+                idx = self.editwin.text.index(f"{idx}+1c")
             
             # Add the new highlight tag to the selected region
             self.editwin.text.tag_add(color_tag, start, end)
