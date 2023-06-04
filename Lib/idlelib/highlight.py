@@ -20,13 +20,12 @@ LIGHT_ORANGE = "#FFBF80"
 LIGHT_PURPLE = "#BF80FF"
 UNHIGHLIGHT = "white"
 
-
 class HighlightParagraph:
 
     def __init__(self, editwin):
         self.editwin = editwin
         self.privious_findNext = '0.0'
-    
+        # Define all highlight colors here
         self.all_colors = [LIGHT_BLUE, LIGHT_RED, LIGHT_YELLOW, LIGHT_GREEN, LIGHT_ORANGE, LIGHT_PURPLE, UNHIGHLIGHT]
         # Convert color names to valid tag names (no # sign)
         self.all_tags = ['highlight_' + color.replace('#', '') for color in self.all_colors]
@@ -41,15 +40,9 @@ class HighlightParagraph:
             self.editwin.color_menu.add_command(label="orange", command=lambda: self.toggle_highlight(LIGHT_ORANGE))
             self.editwin.color_menu.add_command(label="purple", command=lambda: self.toggle_highlight(LIGHT_PURPLE))
             self.editwin.color_menu.add_command(label="Unhighlight", command=lambda: self.toggle_highlight(UNHIGHLIGHT))
-        else:
-            self.editwin.update_menu_state('edit', "Highlight Line Region", 'disabled')
-        
-    def create_next_highlight(self):
-        if self.editwin.allow_highlight:
             self.editwin.text.bind("<<next-highlight>>", self.next_highlight)
             self.editwin.text.bind("<<find-first-highlight>>", self.find_first_highlight_event)
         else:
-            # disable the button
             self.editwin.update_menu_state('edit', "Highlight Line Region", 'disabled')
             self.editwin.update_menu_state('edit', "Find Next Highlight", 'disabled')
             self.editwin.update_menu_state('edit', "Find First Highlight", 'disabled')
@@ -99,7 +92,6 @@ class HighlightParagraph:
     def toggle_highlight(self, color):
         # get the selected region
         start, end = self.editwin.get_selection_indices()
-        
         if start and end:
             # Create unique tag for each color
             color_tag = 'highlight_' + color.replace('#', '')
