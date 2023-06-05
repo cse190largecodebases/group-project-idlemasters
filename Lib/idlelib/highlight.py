@@ -89,9 +89,11 @@ class HighlightParagraph:
         self.privious_findNext = next_tag
         return 'break'
     
-    def toggle_highlight(self, color):
+    def toggle_highlight(self, color, start=None, end=None):
         # get the selected region
-        start, end = self.editwin.get_selection_indices()
+        if not start and not end:
+            start, end = self.editwin.get_selection_indices()
+
         if start and end:
             # Create unique tag for each color
             color_tag = 'highlight_' + color.replace('#', '')
