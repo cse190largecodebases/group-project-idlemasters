@@ -92,7 +92,7 @@ class HighlightParagraphTestCase(unittest.TestCase):
         
 
     #check if next_highlight is working correctly
-    def test_next_highlight(self):
+    def test_next_wrap(self):
         start1 = '1.0'
         end1 = '2.0'
         color = "light blue"
@@ -107,12 +107,24 @@ class HighlightParagraphTestCase(unittest.TestCase):
         event.widget = self.text
         self.highlighter.next_highlight(event)
         self.assertEqual(self.text.index("insert"), start1)
-
         
-        # event2 = tkinter.Event()  # Create another event object
-        # event2.widget = self.text
-        # self.highlighter.next_highlight(event2)
-        # self.assertEqual(self.text.index("insert"), start2)
+    #check if next_highlight is working correctly
+    def test_next_normal(self):
+        start1 = '3.0'
+        end1 = '4.0'
+        color = "light blue"
+        self.highlighter.toggle_highlight(color, start1, end1)
+
+        start2 = '1.0'
+        end2 = '2.0'
+        color = "red"
+        self.highlighter.toggle_highlight(color, start2, end2)
+
+        event = tkinter.Event()
+        event.widget = self.text
+        self.highlighter.next_highlight(event)
+        self.assertEqual(self.text.index("insert"), start1)
+
 
 
 
