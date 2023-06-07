@@ -84,8 +84,7 @@ class HighlightParagraph:
         
         self.editwin.text.tag_remove("sel", "1.0", "end")
         self.editwin.text.mark_set("insert", next_tag)
-        self.editwin.text.see("insert")
-        self.editwin.set_line_and_column()
+        #self.editwin.set_line_and_column()
         self.privious_findNext = next_tag
         return 'break'
     

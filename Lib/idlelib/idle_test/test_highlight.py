@@ -3,6 +3,7 @@ from idlelib.highlight import HighlightParagraph
 from idlelib.iomenu import IOBinding
 from idlelib.idle_test.mock_idle import Editor
 from tkinter import Tk, Text
+import tkinter
 import os
 
 class HighlightParagraphTestCase(unittest.TestCase):
@@ -96,11 +97,18 @@ class HighlightParagraphTestCase(unittest.TestCase):
         color = "red"
         self.highlighter.toggle_highlight(color, start2, end2)
 
-        self.highlighter.next_highlight(None)
+        event = tkinter.Event()
+        event.widget = self.text
+        self.highlighter.next_highlight(event)
         self.assertEqual(self.text.index("insert"), start1)
 
-
         
+        # event2 = tkinter.Event()  # Create another event object
+        # event2.widget = self.text
+        # self.highlighter.next_highlight(event2)
+        # self.assertEqual(self.text.index("insert"), start2)
+
+
 
         
 
