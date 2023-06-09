@@ -7,6 +7,7 @@ File renamed from paragraph.py with functions added from editor.py.
 """
 import re
 import itertools
+import json
 
 from tkinter.messagebox import askyesno
 from tkinter.simpledialog import askinteger
@@ -84,8 +85,7 @@ class HighlightParagraph:
         
         self.editwin.text.tag_remove("sel", "1.0", "end")
         self.editwin.text.mark_set("insert", next_tag)
-        self.editwin.text.see("insert")
-        self.editwin.set_line_and_column()
+        #self.editwin.set_line_and_column()
         self.privious_findNext = next_tag
         return 'break'
     
@@ -119,7 +119,58 @@ class HighlightParagraph:
                 self.editwin.text.tag_remove(color_tag, start, end)
             self.editwin.text.tag_raise("sel")
         return "break"
+    
+    def reload_highlight(self, filename):
+        # the data path for jason file 
+        file_path = "data.json"  
+        # color and tag type    
+        all_colors = ["light blue", "#FF7F7F", "#FFFFBF", "#88FF88", "#FFBF80", "#BF80FF", "white"]
+        all_tags = ['highlight_' + color.replace('#', '') for color in all_colors]
+        
+        # read the json file 
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+        
+        if filename in data:
+            tag_list = data[filename]
+            for idx, tag in enumerate(tag_list):
+                tuple_tag = [(tag[i], tag[i+1]) for i in range(0, len(tag), 2)]
+                for highlight in tuple_tag:
+                    self.editwin.flist.dict[filename].text.tag_add(all_tags[idx], highlight[0], highlight[1])
+                    self.editwin.flist.dict[filename].text.tag_config(all_tags[idx], background=all_colors[idx])
+                    
+        self.editwin.flist.dict[filename].text.tag_raise("sel")
 
+    def save_highlight(self, filename):
+        # the data path for jason file 
+        file_path = "data.json"  
+        # color and tag type    
+        all_colors = ["light blue", "#FF7F7F", "#FFFFBF", "#88FF88", "#FFBF80", "#BF80FF", "white"]
+        all_tags = ['highlight_' + color.replace('#', '') for color in all_colors]
+        
+        # list to save the tag data
+        tag_list = []
+        
+        # read the json file 
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+        
+        # get all type of tag data
+        for tag in all_tags:
+            tag_range = list(self.editwin.text.tag_ranges(tag))
+            tag_range_string = [str(element) for element in tag_range]
+            tag_list.append(tag_range_string)
+        
+        
+        data[filename] = tag_list
+
+        # Convert the list to JSON format
+        
+        #save back to jason file
+        json_data = json.dumps(data)
+        # Write the JSON data to the file
+        with open(file_path, 'w') as file:
+            file.write(json_data)
 
 
 

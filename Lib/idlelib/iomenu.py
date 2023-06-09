@@ -9,6 +9,7 @@ import json
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.simpledialog import askstring
+from idlelib.highlight import HighlightParagraph
 
 from idlelib.config import idleConf
 from idlelib.util import py_extensions
@@ -99,26 +100,10 @@ class IOBinding:
                     flist.open(filename, self.loadfile)
                 else:
                     flist.open(filename)
+                    # called the highlight paragraph to reaload the highlight information
+                    self.editwin.HighlightParagraph(self.editwin).reload_highlight(filename)
+
                     
-                    # the data path for jason file 
-                    file_path = "data.json"  
-                    # color and tag type    
-                    all_colors = ["light blue", "#FF7F7F", "#FFFFBF", "#88FF88", "#FFBF80", "#BF80FF", "white"]
-                    all_tags = ['highlight_' + color.replace('#', '') for color in all_colors]
-                    
-                    # read the json file 
-                    with open(file_path, 'r') as file:
-                        data = json.load(file)
-                    
-                    if filename in data:
-                        tag_list = data[filename]
-                        for idx, tag in enumerate(tag_list):
-                            tuple_tag = [(tag[i], tag[i+1]) for i in range(0, len(tag), 2)]
-                            for highlight in tuple_tag:
-                                flist.dict[filename].text.tag_add(all_tags[idx], highlight[0], highlight[1])
-                                flist.dict[filename].text.tag_config(all_tags[idx], background=all_colors[idx])
-                                
-                    flist.dict[filename].text.tag_raise("sel")
                     
                     
             else:
@@ -261,36 +246,9 @@ class IOBinding:
         return "break"
 
     def writefile(self, filename):
-
-        # the data path for jason file 
-        file_path = "data.json"  
-        # color and tag type    
-        all_colors = ["light blue", "#FF7F7F", "#FFFFBF", "#88FF88", "#FFBF80", "#BF80FF", "white"]
-        all_tags = ['highlight_' + color.replace('#', '') for color in all_colors]
         
-        # list to save the tag data
-        tag_list = []
-        
-        # read the json file 
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-        
-        # get all type of tag data
-        for tag in all_tags:
-            tag_range = list(self.editwin.text.tag_ranges(tag))
-            tag_range_string = [str(element) for element in tag_range]
-            tag_list.append(tag_range_string)
-        
-        
-        data[filename] = tag_list
-
-        # Convert the list to JSON format
-        
-        #save back to jason file
-        json_data = json.dumps(data)
-        # Write the JSON data to the file
-        with open(file_path, 'w') as file:
-            file.write(json_data)
+        # call the highlightPargraph to save the highlight information
+        self.editwin.HighlightParagraph(self.editwin).save_highlight(filename)
         
         text = self.fixnewlines()
         chars = self.encode(text)
