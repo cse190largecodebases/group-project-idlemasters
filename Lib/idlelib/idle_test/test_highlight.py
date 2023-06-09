@@ -103,6 +103,11 @@ class HighlightParagraphTestCase(unittest.TestCase):
         color = "red"
         self.highlighter.toggle_highlight(color, start2, end2)
 
+        start3 = '5.0'
+        end3 = '6.0'
+        color = "green"
+        self.highlighter.toggle_highlight(color, start3, end3)
+
         event = tkinter.Event()
         event.widget = self.text
         self.highlighter.next_highlight(event)
@@ -110,15 +115,21 @@ class HighlightParagraphTestCase(unittest.TestCase):
         
     #check if next_highlight is working correctly
     def test_next_normal(self):
+
         start1 = '3.0'
         end1 = '4.0'
         color = "light blue"
         self.highlighter.toggle_highlight(color, start1, end1)
 
-        start2 = '1.0'
-        end2 = '2.0'
-        color = "red"
+        start2 = '5.0'
+        end2 = '6.0'
+        color = "green"
         self.highlighter.toggle_highlight(color, start2, end2)
+
+        start3 = '1.0'
+        end3 = '2.0'
+        color = "red"
+        self.highlighter.toggle_highlight(color, start3, end3)
 
         event = tkinter.Event()
         event.widget = self.text
