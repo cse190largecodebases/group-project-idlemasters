@@ -1,0 +1,4 @@
+# .covergerc to control coverge.py
+[run]
+include = ./*
+branch = True
