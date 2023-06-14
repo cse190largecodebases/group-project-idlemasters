@@ -58,6 +58,9 @@ menudefs = [
    ('E_xpand Word', '<<expand-word>>'),
    ('Show C_all Tip', '<<force-open-calltip>>'),
    ('Show Surrounding P_arens', '<<flash-paren>>'),
+   None,
+   ('Find Next Highlight', '<<next-highlight>>'),
+   ('Find First Highlight', '<<find-first-highlight>>'),
    ]),
 
  ('format', [

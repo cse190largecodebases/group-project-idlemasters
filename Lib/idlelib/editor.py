@@ -60,12 +60,14 @@ class EditorWindow:
     from idlelib.codecontext import CodeContext
     from idlelib.sidebar import LineNumbers
     from idlelib.format import FormatParagraph, FormatRegion, Indents, Rstrip
+    from idlelib.highlight import HighlightParagraph
     from idlelib.parenmatch import ParenMatch
     from idlelib.zoomheight import ZoomHeight
 
     filesystemencoding = sys.getfilesystemencoding()  # for file names
     help_url = None
 
+    allow_highlight = True
     allow_code_context = True
     allow_line_numbers = True
     user_input_insert_tags = None
@@ -475,6 +477,12 @@ class EditorWindow:
         self.menudict['file'].insert_cascade(3, label='Recent Files',
                                              underline=0,
                                              menu=self.recent_files_menu)
+        
+        # create color_menu and call the class HighlightParagraph
+        self.color_menu = Menu(self.menudict['edit'], tearoff=0)    
+        self.HighlightParagraph(self).create_color_menu()
+        
+        
         self.base_helpmenu_length = self.menudict['help'].index(END)
         self.reset_help_menu_entries()
 

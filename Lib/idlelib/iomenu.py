@@ -4,10 +4,12 @@ import shlex
 import sys
 import tempfile
 import tokenize
+import json
 
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.simpledialog import askstring
+from idlelib.highlight import HighlightParagraph
 
 from idlelib.config import idleConf
 from idlelib.util import py_extensions
@@ -83,6 +85,7 @@ class IOBinding:
             else:
                 filename=editFile
             if filename:
+                
                 # If editFile is valid and already open, flist.open will
                 # shift focus to its existing window.
                 # If the current window exists and is a fresh unnamed,
@@ -97,6 +100,12 @@ class IOBinding:
                     flist.open(filename, self.loadfile)
                 else:
                     flist.open(filename)
+                    # called the highlight paragraph to reaload the highlight information
+                    self.editwin.HighlightParagraph(self.editwin).reload_highlight(filename)
+
+                    
+                    
+                    
             else:
                 if self.text:
                     self.text.focus_set()
@@ -237,6 +246,10 @@ class IOBinding:
         return "break"
 
     def writefile(self, filename):
+        
+        # call the highlightPargraph to save the highlight information
+        self.editwin.HighlightParagraph(self.editwin).save_highlight(filename)
+        
         text = self.fixnewlines()
         chars = self.encode(text)
         try:
