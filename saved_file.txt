@@ -1,5 +1,0 @@
-    '''The first line is under the max width.
-    The second line's length is way over the max width. It goes on and on until it is over 100 characters long.
-    Same thing with the third line. It is also way over the max width, but FormatParagraph will fix it.
-    '''
-
